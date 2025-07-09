@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicioReserva {
+public class ReservaServicio {
     
     private int idReserva;
     private int idServicio;
