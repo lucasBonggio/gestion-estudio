@@ -1,9 +1,10 @@
 USE freedb_estudio_tpf;
 
+DELETE FROM salas WHERE id > 0;
 
 -- TRAEMOS TODAS LAS RESERVAS, ELIGIENDO LOS DATOS MAS SIGNIFICATIVOS
 SELECT r.id AS id_reserva,
-	   b.nombre AS banda,
+	b.nombre AS banda,
        sa.nombre AS sala,
        r.fecha,
        r.hora_inicio,
@@ -15,7 +16,7 @@ JOIN salas sa ON r.id_sala = sa.id;
 
 -- TRAER TODAS LAS RESERVAS QUE FUERON PARA SALAS DE GRABACIÓN
 SELECT r.id AS id_reserva,
-	   b.nombre AS banda,
+	b.nombre AS banda,
        sa.tipo AS tipo_sala,
        r.fecha,
        r.precio_final
@@ -36,7 +37,7 @@ ORDER BY cantidad_ensayos DESC;
 
 -- TRAER TODAS LAS BANDAS QUE PASARON POR EL ESTUDIO Y CUANDO HA GASTADO CADA UNA
 SELECT b.nombre AS banda,
-	   SUM(r.precio_final) AS total_gastado
+	SUM(r.precio_final) AS total_gastado
 FROM reservas r
 JOIN bandas b ON r.id_banda = b.id
 GROUP BY b.id;
@@ -52,7 +53,7 @@ ORDER BY total_alquilado DESC;
 
 -- LA CANTIDAD DE VECES QUE SE ALQUILO CADA SALA Y TRAERLAS ORDENADAS
 SELECT s.nombre,
-	   COUNT(*) veces_alquiladas
+	COUNT(*) veces_alquiladas
 FROM salas s
 JOIN reservas r ON r.id_sala = s.id
 GROUP BY s.id
@@ -80,7 +81,3 @@ SELECT nombre,
 	   observaciones
 FROM bandas
 WHERE observaciones IS NOT NULL;
-
-
-
-		
