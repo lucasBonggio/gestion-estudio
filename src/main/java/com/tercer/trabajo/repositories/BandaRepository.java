@@ -16,7 +16,7 @@ import com.tercer.trabajo.entidades.Banda;
 import com.tercer.trabajo.repositories.interfaces.I_BandaRepository;
 
 @Repository
-public class BandaDAO implements I_BandaRepository {
+public class BandaRepository implements I_BandaRepository {
     
     private final DataSource DATASOURCE;
 
@@ -26,14 +26,14 @@ public class BandaDAO implements I_BandaRepository {
         "SELECT * FROM bandas WHERE id = ?";
     private static final String SQL_FIND_ALL =
         "SELECT * FROM bandas";
-    private static final String SQL_FIND_BY_RESERVA =
-        "SELECT b.* FROM reservas r JOIN bandas b ON r.id_banda = b.id WHERE r.id = ?";
+    private static final String SQL_FIND_BY_NOMBRE =
+        "SELECT * FROM bandas WHERE nombre = ?";
     private static final String SQL_UPDATE = 
         "UPDATE bandas SET nombre = ?, genero = ?, cantidad_musicos = ?, contacto = ?, observaciones = ? WHERE id = ?";
     private static final String SQL_DELETE =
         "DELETE FROM bandas WHERE id = ?";
 
-    public BandaDAO(DataSource dataSource){
+    public BandaRepository(DataSource dataSource){
         this.DATASOURCE = dataSource;
     }
 
@@ -59,7 +59,7 @@ public class BandaDAO implements I_BandaRepository {
     @Override
     public Banda findById(int id) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
-                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_ID, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_ID)) {
             ps.setInt(1, id);
 
             try(ResultSet rs = ps.executeQuery()){
@@ -87,10 +87,10 @@ public class BandaDAO implements I_BandaRepository {
     }
 
     @Override
-    public Banda findByReserva(int idReserva) throws SQLException {
+    public Banda findByNombre(String nombre) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
-                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_RESERVA)) {
-            ps.setInt(1, idReserva);
+                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_NOMBRE)) {
+            ps.setString(1, nombre);
             
             try (ResultSet rs = ps.executeQuery()) {
                 if(rs.next()){
@@ -102,7 +102,7 @@ public class BandaDAO implements I_BandaRepository {
     }
 
     @Override
-    public int update(Banda banda, int idBanda) throws SQLException {
+    public int update(Banda banda) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
             ps.setString(1, banda.getNombre());
@@ -111,8 +111,7 @@ public class BandaDAO implements I_BandaRepository {
             ps.setString(4, banda.getContacto());
             ps.setString(5, banda.getObservaciones());
 
-            ps.setInt(6, idBanda);
-
+            ps.setInt(6, banda.getId());
             int filasAfectadas = ps.executeUpdate();
             return filasAfectadas;
         }

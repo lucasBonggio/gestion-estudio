@@ -9,7 +9,7 @@ public interface I_BandaRepository {
     void create(Banda banda) throws SQLException;
     Banda findById(int id) throws SQLException;
     List<Banda> findAll() throws SQLException;
-    Banda findByReserva(int idReserva) throws SQLException;
-    int update(Banda banda, int idBanda) throws SQLException;
+    Banda findByNombre(String nombre) throws SQLException;
+    int update(Banda banda) throws SQLException;
     int delete(int id) throws SQLException;
 }

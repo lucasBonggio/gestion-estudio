@@ -16,7 +16,7 @@ import com.tercer.trabajo.entidades.Servicio;
 import com.tercer.trabajo.repositories.interfaces.I_ServicioRepository;
 
 @Repository
-public class ServicioDAO implements I_ServicioRepository {
+public class ServicioRepository implements I_ServicioRepository {
 
     private final DataSource DATASOURCE;
 
@@ -24,8 +24,8 @@ public class ServicioDAO implements I_ServicioRepository {
         "INSERT INTO servicios(nombre, precio) VALUES(?, ?)";
     private static final String  SQL_FIND_BY_ID =
         "SELECT * FROM servicios WHERE id = ?";
-    private static final String SQL_FIND_BY_RESERVA = 
-        "SELECT s.* FROM servicios s JOIN reserva_servicios rs ON rs.id_servicio = s.id JOIN reservas r ON r.id = rs.id_reserva WHERE r.id = ?";
+    private static final String SQL_FIND_BY_NOMBRE = 
+        "SELECT * FROM servicios WHERE nombre = ?";
     private static final String SQL_FIND_ALL = 
         "SELECT * FROM servicios";
     private static final String SQL_UPDATE = 
@@ -33,7 +33,7 @@ public class ServicioDAO implements I_ServicioRepository {
     private static final String SQL_DELETE = 
         "DELETE FROM servicios WHERE id = ?";
     
-    public ServicioDAO(DataSource dataSource){
+    public ServicioRepository(DataSource dataSource){
         this.DATASOURCE = dataSource;
     }
 
@@ -69,20 +69,20 @@ public class ServicioDAO implements I_ServicioRepository {
     }
 
     @Override
-    public List<Servicio> findByReserva(int idReserva) throws SQLException {
+    public Servicio findByNombre(String nombre) throws SQLException {
         List<Servicio> servicios = new ArrayList<>();
 
         try (Connection conn = DATASOURCE.getConnection();
-                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_RESERVA, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, idReserva);
+                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_NOMBRE, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, nombre);
             
             try (ResultSet rs = ps.executeQuery()) {
-                while(rs.next()){
-                    servicios.add(mapRow(rs));
+                if(rs.next()){
+                    return mapRow(rs);
                 }
             }
         } 
-        return servicios;
+        return null;
     }
 
     @Override
@@ -100,15 +100,14 @@ public class ServicioDAO implements I_ServicioRepository {
     }
 
     @Override
-    public int update(Servicio servicio, int id) throws SQLException {
+    public int update(Servicio servicio) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
             
             ps.setString(1, servicio.getNombre());
             ps.setDouble(2, servicio.getPrecio());
 
-            ps.setInt(3, id);
-
+            ps.setInt(3, servicio.getId());
             int filasAfectadas = ps.executeUpdate();
             return filasAfectadas;
         } 

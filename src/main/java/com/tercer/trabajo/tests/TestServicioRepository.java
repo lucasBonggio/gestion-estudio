@@ -37,17 +37,15 @@ public class TestServicioRepository {
                 System.err.println("ERROR! No se encontró el servicio. ");
             }
 
-            System.out.println("TEST 3: Buscar servicios por reserva");
+            System.out.println("TEST 3: Buscar servicios por nombre");
 
-            List<Servicio> servicioPorReserva = servicioDAO.findByReserva(3);
+            Servicio servicioPorNombre = servicioDAO.findByNombre("Alquiler de instrumentos");
 
-            if(!servicioPorReserva.isEmpty()){
-                for (Servicio ser : servicioPorReserva) {
-                    System.out.println("Servicio " + ser.getId() + ": " + ser);
-                    System.out.println("==================================");
-                }
+            if(servicioPorNombre != null){
+                
+                System.out.println("Servicio: " + servicioPorNombre);
             }else{
-                System.err.println("No hay servicios de la reserva. ");
+                System.err.println("No hay servicios con el nombre ingresado. ");
             }
 
             System.out.println("TEST 4: Buscar todos los servicios");
@@ -56,7 +54,6 @@ public class TestServicioRepository {
             if(!servicios.isEmpty()){
                 for (Servicio ser : servicios) {
                     System.out.println("Servicio " + ser.getId() + ": " + ser);
-                    System.out.println("==================================");
                 }
             }else{
                 System.err.println("No hay servicios que mostrar. ");
@@ -64,9 +61,9 @@ public class TestServicioRepository {
 
             System.out.println("TEST 5: Actualizar servicio");
 
-            Servicio actualizar = new Servicio(22, "Venta de púas", 2000);
+            Servicio servicioActualizado = new Servicio(6, "Venta de púas", 4500);
 
-            int filasAfectadas = servicioDAO.update(actualizar, 6);
+            int filasAfectadas = servicioDAO.update(servicioActualizado);
 
             if(filasAfectadas > 0){
                 System.out.println("El servicio se actualizó exitosamente. ");
@@ -76,7 +73,7 @@ public class TestServicioRepository {
 
             System.out.println("TEST 6: Eliminar servicio");
 
-            int filasAfectadas2 = servicioDAO.delete(5);
+            int filasAfectadas2 = servicioDAO.delete(13);
             if(filasAfectadas2 > 0){
                 System.out.println("El servicio se eliminó exitosamente. ");
             }else{

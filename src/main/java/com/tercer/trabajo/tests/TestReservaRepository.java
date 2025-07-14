@@ -97,7 +97,7 @@ public class TestReservaRepository {
 
             Reserva actualizar = new Reserva(22, 8, 22, LocalDate.now(), horaInicio, horaInicio, 2 * 32500);
 
-            int filasAfectadas = reservaDAO.update(actualizar, 11);
+            int filasAfectadas = reservaDAO.update(actualizar);
             if(filasAfectadas > 0){
                 System.out.println("Reserva actualizada corretamente. ");
             }else{
@@ -106,7 +106,7 @@ public class TestReservaRepository {
 
             System.out.println("TEST 6: Eliminar reserva");
             
-            int filasAfectadas2 = reservaDAO.delete(16);
+            int filasAfectadas2 = reservaDAO.delete(12);
             if(filasAfectadas2 > 0){
                 System.out.println("Reserva eliminada corretamente. ");
             }else{

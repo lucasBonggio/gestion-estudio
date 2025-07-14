@@ -59,7 +59,7 @@ public class TestReservaServicioRepository {
 
             ReservaServicio rsActualizar = new ReservaServicio(8, 11, 2);
             
-            int filasAfectadas = reservaServicioDAO.update(rsActualizar, 7, 4);
+            int filasAfectadas = reservaServicioDAO.update(rsActualizar);
             if(filasAfectadas > 0){
                 System.out.println("Reserva del servicio actualizado exitosamente");
             }else{

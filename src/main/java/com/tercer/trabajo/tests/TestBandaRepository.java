@@ -41,11 +41,11 @@ public class TestBandaRepository {
                 System.out.println("Banda " + band.getId() + ": " + band);
             }
 
-            System.out.println("TEST 4: Buscar por reserva");
-            Banda bandaReserva = bandaDAO.findByReserva(8);
-            if(bandaReserva != null){
+            System.out.println("TEST 4: Buscar por nombre");
+            Banda bandaPorNombre = bandaDAO.findByNombre("Brigrada metalica");
+            if(bandaPorNombre != null){
                 System.out.println("Banda encontrada. ");
-                System.out.println("Banda: " + bandaReserva);
+                System.out.println("Banda: " + bandaPorNombre);
             }else{
                 System.err.println("ERROR! No se pudo encontrar la banda. ");
             }
@@ -55,7 +55,7 @@ public class TestBandaRepository {
 
             bandaEncontrada.setCantidadMusicos(4);
 
-            int filasAfectadas = bandaDAO.update(bandaEncontrada, 19);
+            int filasAfectadas = bandaDAO.update(bandaEncontrada);
             if(filasAfectadas > 0){
                 System.out.println("Banda actualizada corretamente. ");
             }else{

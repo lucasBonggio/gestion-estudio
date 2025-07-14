@@ -18,7 +18,7 @@ import com.tercer.trabajo.entidades.Reserva;
 import com.tercer.trabajo.repositories.interfaces.I_ReservaRepository;
 
 @Repository
-public class ReservaDAO implements I_ReservaRepository {
+public class ReservaRepository implements I_ReservaRepository {
 
     private final DataSource DATASOURCE;
 
@@ -35,7 +35,7 @@ public class ReservaDAO implements I_ReservaRepository {
     private final String SQL_DELETE =
         "DELETE FROM reservas WHERE id = ?";
 
-    public ReservaDAO(DataSource dataSource){
+    public ReservaRepository(DataSource dataSource){
         this.DATASOURCE = dataSource;
     }
 
@@ -101,7 +101,7 @@ public class ReservaDAO implements I_ReservaRepository {
         return reservas;
     }
 
-    public int update(Reserva reserva, int idReserva) throws SQLException{
+    public int update(Reserva reserva) throws SQLException{
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
             ps.setInt(1, reserva.getIdBanda());
@@ -111,7 +111,7 @@ public class ReservaDAO implements I_ReservaRepository {
             ps.setTime(5, Time.valueOf(reserva.getHoraFin()));
             ps.setDouble(6, reserva.getPrecioFinal());
 
-            ps.setInt(7, idReserva);
+            ps.setInt(7, reserva.getId());
 
             int filasAfectadas = ps.executeUpdate();
             return filasAfectadas;

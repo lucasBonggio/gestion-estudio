@@ -10,6 +10,6 @@ public interface I_ReservaServicioRepository {
     ReservaServicio findById(int idReserva, int idServicio) throws SQLException;
     List<ReservaServicio> findAll() throws SQLException;
     List<ReservaServicio> findByReserva(int idReserva) throws SQLException;
-    int update(ReservaServicio servicioReserva, int idReserva, int idServicio) throws SQLException;
+    int update(ReservaServicio servicioReserva) throws SQLException;
     int delete(int idReserva, int idServicio) throws SQLException; 
 }

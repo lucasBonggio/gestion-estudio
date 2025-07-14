@@ -16,7 +16,7 @@ import com.tercer.trabajo.entidades.ReservaServicio;
 import com.tercer.trabajo.repositories.interfaces.I_ReservaServicioRepository;
 
 @Repository
-public class ReservaServicioDAO implements I_ReservaServicioRepository{
+public class ReservaServicioRepository implements I_ReservaServicioRepository{
 
     private final DataSource DATASOURCE;
 
@@ -29,11 +29,11 @@ public class ReservaServicioDAO implements I_ReservaServicioRepository{
     private final String SQL_FIND_BY_RESERVA = 
         "SELECT * FROM reserva_servicios WHERE id_reserva = ?";
     private final String SQL_UPDATE = 
-        "UPDATE reserva_servicios SET id_reserva = ?, id_servicio = ?, cantidad = ? WHERE id_reserva = ? AND id_servicio = ?";
+        "UPDATE reserva_servicios SET cantidad = ? WHERE id_reserva = ? AND id_servicio = ?";
     private final String SQL_DELETE = 
         "DELETE FROM reserva_servicios WHERE id_reserva = ? AND id_servicio = ?";
 
-    public ReservaServicioDAO(DataSource dataSource){
+    public ReservaServicioRepository(DataSource dataSource){
         this.DATASOURCE = dataSource;
     }
 
@@ -99,15 +99,13 @@ public class ReservaServicioDAO implements I_ReservaServicioRepository{
     }
 
     @Override
-    public int update(ReservaServicio reservaServicios, int idReserva, int idServicio) throws SQLException {
+    public int update(ReservaServicio reservaServicios) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
-            ps.setInt(1, reservaServicios.getIdReserva());
-            ps.setInt(2, reservaServicios.getIdServicio());
-            ps.setInt(3, reservaServicios.getCantidad());
-            
-            ps.setInt(4, idReserva);
-            ps.setInt(5, idServicio);
+                    ps.setInt(1, reservaServicios.getCantidad());
+
+                    ps.setInt(2, reservaServicios.getIdServicio());
+                    ps.setInt(3, reservaServicios.getIdReserva());
                 
             int filasAfectadas = ps.executeUpdate();
             return filasAfectadas;

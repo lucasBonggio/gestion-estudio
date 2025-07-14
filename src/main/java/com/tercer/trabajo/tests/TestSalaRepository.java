@@ -40,9 +40,9 @@ public class TestSalaRepository {
                 System.err.println("ERROR! No se pudo encontrar la sala. ");
             }
 
-            System.out.println("TEST 3: Buscar sala por reserva");
+            System.out.println("TEST 3: Buscar sala por nombre");
 
-            Sala salaPorReserva = salaDAO.findByReserva(8);
+            Sala salaPorReserva = salaDAO.findByNombre("Sala 1");
             if(salaPorReserva != null){
                 System.out.println("Sala encontrada exitosamente");
                 System.out.println(salaPorReserva);
@@ -65,12 +65,13 @@ public class TestSalaRepository {
             System.out.println("TEST 5: Actualizar sala");
 
             Sala salaActualizada = new Sala();
+            salaActualizada.setId(22);
             salaActualizada.setNombre("Sala Ozzy");
             salaActualizada.setCapacidad(5);
             salaActualizada.setTipo(Tipo.Ensayo);
-            salaActualizada.setPrecioHora(32500);
+            salaActualizada.setPrecioHora(45500);
 
-            int filasAfectadas2 = salaDAO.update(salaActualizada, 22);
+            int filasAfectadas2 = salaDAO.update(salaActualizada);
             if(filasAfectadas2 > 0){
                 System.out.println("La sala se actualizó correctamente. ");
             }else{
@@ -78,7 +79,7 @@ public class TestSalaRepository {
             }
 
             System.out.println("TEST 6: Borrar una sala: ");
-            int filasAfectadas = salaDAO.delete(23);
+            int filasAfectadas = salaDAO.delete(25);
             if(filasAfectadas > 0){
                 System.out.println("La sala se eliminó correctamente. ");
             }else{

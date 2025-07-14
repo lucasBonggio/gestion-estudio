@@ -17,7 +17,7 @@ import com.tercer.trabajo.enums.Tipo;
 import com.tercer.trabajo.repositories.interfaces.I_SalaRepository;
 
 @Repository
-public class SalaDAO implements I_SalaRepository {
+public class SalaRepository implements I_SalaRepository {
 
     private final DataSource DATASOURCE;
 
@@ -25,8 +25,8 @@ public class SalaDAO implements I_SalaRepository {
         "INSERT INTO salas(nombre, capacidad, tipo, precio_hora) VALUES(?, ?, ?, ?)";
     private static final String SQL_FIND_BY_ID = 
         "SELECT * FROM salas WHERE id = ?";
-    private static final String SQL_FIND_BY_RESERVA = 
-        "SELECT s.* FROM salas s JOIN reservas r ON r.id_sala = s.id WHERE r.id = ?";
+    private static final String SQL_FIND_BY_NOMBRE = 
+        "SELECT * FROM salas WHERE nombre = ?";
     private static final String SQL_FIND_ALL = 
         "SELECT * FROM salas";
     private static final String SQL_UPDATE = 
@@ -34,7 +34,7 @@ public class SalaDAO implements I_SalaRepository {
     private static final String SQL_DELETE = 
         "DELETE FROM salas WHERE id = ?";
 
-    public SalaDAO(DataSource dataSource){
+    public SalaRepository(DataSource dataSource){
         this.DATASOURCE = dataSource;
     }
 
@@ -72,10 +72,10 @@ public class SalaDAO implements I_SalaRepository {
     }
 
     @Override
-    public Sala findByReserva(int idReserva) throws SQLException {
+    public Sala findByNombre(String nombre) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
-                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_RESERVA, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, idReserva);
+                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_NOMBRE, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, nombre);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if(rs.next()){
@@ -102,15 +102,15 @@ public class SalaDAO implements I_SalaRepository {
     }
 
     @Override
-    public int update(Sala sala, int id) throws SQLException {
+    public int update(Sala sala) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
             ps.setString(1, sala.getNombre());
             ps.setInt(2, sala.getCapacidad());
             ps.setString(3, sala.getTipo().name());
             ps.setDouble(4, sala.getPrecioHora());
-
-            ps.setInt(5, id);
+            
+            ps.setInt(5, sala.getId());
 
             int filasAfectadas = ps.executeUpdate();
             return filasAfectadas;
