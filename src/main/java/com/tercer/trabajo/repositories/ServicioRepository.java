@@ -56,7 +56,7 @@ public class ServicioRepository implements I_ServicioRepository {
     @Override
     public Servicio findById(int id) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
-                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_ID, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_ID)) {
             ps.setInt(1, id);
             
             try (ResultSet rs = ps.executeQuery()) {
@@ -70,10 +70,8 @@ public class ServicioRepository implements I_ServicioRepository {
 
     @Override
     public Servicio findByNombre(String nombre) throws SQLException {
-        List<Servicio> servicios = new ArrayList<>();
-
         try (Connection conn = DATASOURCE.getConnection();
-                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_NOMBRE, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_NOMBRE)) {
             ps.setString(1, nombre);
             
             try (ResultSet rs = ps.executeQuery()) {

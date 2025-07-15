@@ -106,7 +106,7 @@ public class TestReservaRepository {
 
             System.out.println("TEST 6: Eliminar reserva");
             
-            int filasAfectadas2 = reservaDAO.delete(12);
+            int filasAfectadas2 = reservaDAO.delete(32);
             if(filasAfectadas2 > 0){
                 System.out.println("Reserva eliminada corretamente. ");
             }else{

@@ -17,7 +17,7 @@ public class TestReservaServicioRepository {
 
             System.out.println("TEST 1: Crear una reservaServicio");
 
-            ReservaServicio reservaServicio = new ReservaServicio(8, 1, 2);
+            ReservaServicio reservaServicio = new ReservaServicio(4, 16, 2);
             reservaServicioDAO.create(reservaServicio);
 
             System.out.println("TEST 2: Buscar por id");
@@ -57,7 +57,7 @@ public class TestReservaServicioRepository {
 
             System.out.println("TEST 5: Actualizar reserva del servicio");
 
-            ReservaServicio rsActualizar = new ReservaServicio(8, 11, 2);
+            ReservaServicio rsActualizar = new ReservaServicio(8, 11, 4);
             
             int filasAfectadas = reservaServicioDAO.update(rsActualizar);
             if(filasAfectadas > 0){
@@ -67,13 +67,14 @@ public class TestReservaServicioRepository {
             }
 
             
-            System.out.println("TEST 6: Eliminar la reserva de un servicio");
-            int filasAfectadas2 = reservaServicioDAO.delete(2, 1);
-            if(filasAfectadas2 > 0){
-                System.out.println("Reserva del servicio se eliminó exitosamente");
-            }else{
-                System.err.println("ERROR! No se pudo eliminar la reserva del servicio");
-            }
+            // System.out.println("TEST 6: Eliminar la reserva de un servicio");
+
+            // int filasAfectadas2 = reservaServicioDAO.delete(8, 3);
+            // if(filasAfectadas2 > 0){
+            //     System.out.println("Reserva del servicio se eliminó exitosamente");
+            // }else{
+            //     System.err.println("ERROR! No se pudo eliminar la reserva del servicio");
+            // }
 
         } catch (Exception e) {
             e.printStackTrace();

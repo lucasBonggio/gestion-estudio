@@ -73,7 +73,7 @@ public class TestServicioRepository {
 
             System.out.println("TEST 6: Eliminar servicio");
 
-            int filasAfectadas2 = servicioDAO.delete(13);
+            int filasAfectadas2 = servicioDAO.delete(14);
             if(filasAfectadas2 > 0){
                 System.out.println("El servicio se eliminó exitosamente. ");
             }else{

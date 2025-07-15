@@ -39,6 +39,7 @@ public class ReservaRepository implements I_ReservaRepository {
         this.DATASOURCE = dataSource;
     }
 
+    @Override
     public void create(Reserva reserva) throws SQLException{
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
@@ -58,6 +59,7 @@ public class ReservaRepository implements I_ReservaRepository {
         } 
     }
 
+    @Override
     public Reserva findById(int id) throws SQLException {
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_ID)) {
@@ -72,6 +74,7 @@ public class ReservaRepository implements I_ReservaRepository {
         return null;
     }
 
+    @Override
     public List<Reserva> findAll() throws SQLException{
         List<Reserva> reservas = new ArrayList<>();
 
@@ -86,6 +89,7 @@ public class ReservaRepository implements I_ReservaRepository {
         return reservas; 
     }
 
+    @Override
     public List<Reserva> findByBanda(int idBanda) throws SQLException{
         List<Reserva> reservas = new ArrayList<>();
 
@@ -101,6 +105,7 @@ public class ReservaRepository implements I_ReservaRepository {
         return reservas;
     }
 
+    @Override
     public int update(Reserva reserva) throws SQLException{
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
@@ -118,6 +123,7 @@ public class ReservaRepository implements I_ReservaRepository {
         }
     }
     
+    @Override
     public int delete(int id) throws SQLException{
         try (Connection conn = DATASOURCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_DELETE)) {
@@ -129,6 +135,7 @@ public class ReservaRepository implements I_ReservaRepository {
         }
     }
 
+    
     public Reserva mapRow(ResultSet rs) throws SQLException{
         Reserva reserva = new Reserva();
         reserva.setId(rs.getInt(1));

@@ -17,6 +17,7 @@ public class TestBandaRepository {
             I_BandaRepository bandaDAO = context.getBean(I_BandaRepository.class);
 
             System.out.println("TEST 1: Creamos una banda");
+
             Banda banda = new Banda(99, "Metallica", "Heavy-metal", 5, "metallica@gmail.com", null);
             bandaDAO.create(banda);
             if(banda.getId() > 0){
@@ -27,6 +28,7 @@ public class TestBandaRepository {
             }
 
             System.out.println("TEST 2: Buscamos por id");
+
             Banda bandaEncontrada = bandaDAO.findById(19);
             if(bandaEncontrada != null){
                 System.out.println("Banda encontrada. ");
@@ -36,12 +38,14 @@ public class TestBandaRepository {
             }
 
             System.out.println("TEST 3: Buscar todas las bandas");
+
             List<Banda> bandas = bandaDAO.findAll();
             for (Banda band : bandas) {
                 System.out.println("Banda " + band.getId() + ": " + band);
             }
 
             System.out.println("TEST 4: Buscar por nombre");
+
             Banda bandaPorNombre = bandaDAO.findByNombre("Brigrada metalica");
             if(bandaPorNombre != null){
                 System.out.println("Banda encontrada. ");
@@ -63,6 +67,7 @@ public class TestBandaRepository {
             }
 
             System.out.println("TEST 6: Borrar banda");
+            
             int filasAfectadas2 = bandaDAO.delete(banda.getId());
             if(filasAfectadas2 > 0){
                 System.out.println("Banda eliminada corretamente. ");

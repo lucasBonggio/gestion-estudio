@@ -104,8 +104,8 @@ public class ReservaServicioRepository implements I_ReservaServicioRepository{
                 PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
                     ps.setInt(1, reservaServicios.getCantidad());
 
-                    ps.setInt(2, reservaServicios.getIdServicio());
-                    ps.setInt(3, reservaServicios.getIdReserva());
+                    ps.setInt(2, reservaServicios.getIdReserva());
+                    ps.setInt(3, reservaServicios.getIdServicio());
                 
             int filasAfectadas = ps.executeUpdate();
             return filasAfectadas;

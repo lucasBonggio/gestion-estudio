@@ -19,8 +19,8 @@ public class TestSalaRepository {
             I_SalaRepository salaDAO = context.getBean(I_SalaRepository.class);
             
             System.out.println("TEST 1: Crear una sala");
-            // Crear una sala
-            Sala sala = new Sala(99, "Sala 9", 4, Tipo.Ensayo, 350000);
+
+            Sala sala = new Sala(99, "Sala 99", 8, Tipo.Ensayo, 506000);
             salaDAO.create(sala);
 
             if(sala.getId() > 0){
@@ -30,8 +30,9 @@ public class TestSalaRepository {
                 System.err.println("ERROR! No se pudo crear la sala. ");
             }
 
+
             System.out.println("TEST 2: Buscar por id");
-            
+
             Sala salaEncontrada = salaDAO.findById(sala.getId());
             if(salaEncontrada != null){
                 System.out.println("Buscando sala por id: ");
@@ -39,6 +40,7 @@ public class TestSalaRepository {
             }else{
                 System.err.println("ERROR! No se pudo encontrar la sala. ");
             }
+
 
             System.out.println("TEST 3: Buscar sala por nombre");
 
@@ -50,8 +52,8 @@ public class TestSalaRepository {
                 System.err.println("ERROR! No se pudo encontrar la sala");
             }
 
+
             System.out.println("TEST 4: Buscando todas las salas");
-            //Buscar todas las salas
 
             List<Sala> salas = salaDAO.findAll();
             if(!salas.isEmpty()){
@@ -65,11 +67,11 @@ public class TestSalaRepository {
             System.out.println("TEST 5: Actualizar sala");
 
             Sala salaActualizada = new Sala();
-            salaActualizada.setId(22);
-            salaActualizada.setNombre("Sala Ozzy");
+            salaActualizada.setId(2);
+            salaActualizada.setNombre("Sala Dimebag");
             salaActualizada.setCapacidad(5);
             salaActualizada.setTipo(Tipo.Ensayo);
-            salaActualizada.setPrecioHora(45500);
+            salaActualizada.setPrecioHora(450500);
 
             int filasAfectadas2 = salaDAO.update(salaActualizada);
             if(filasAfectadas2 > 0){
@@ -79,7 +81,8 @@ public class TestSalaRepository {
             }
 
             System.out.println("TEST 6: Borrar una sala: ");
-            int filasAfectadas = salaDAO.delete(25);
+
+            int filasAfectadas = salaDAO.delete(35);
             if(filasAfectadas > 0){
                 System.out.println("La sala se eliminó correctamente. ");
             }else{
