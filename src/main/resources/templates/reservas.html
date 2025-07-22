@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio</title>
+    <link rel="stylesheet" href="/stylesEntities.css">
+</head>
+<body>
+    <div class="entidad-container">
+        <div class="entidad-header">
+            <h2 class="entidad-titulo">Reservas</h2>
+            <button class="btn-crear btn-crear-reserva">CREAR RESERVA</button>
+            <a class="btn-crear" th:href="@{/}">VOLVER AL INICIO</a>
+        </div>
+        <div class="busqueda-container">
+            <h2>BUSCAR RESERVA</h2>
+            <form class="formBuscar" th:action="@{/reservas/buscar}" method="get">
+                <label class="labelForm">
+                    <input type="text" name="valor" placeholder="Ingresá el valor..." />
+                </label>
+                <label class="labelForm">
+                    <select name="criterio" class="selectFiltro">
+                        <option value="id">ID</option>
+                        <option value="banda">BANDA</option>
+                    </select>
+                </label>
+                <button class="btn-buscar" type="submit">BUSCAR</button>
+            </form>
+            <div th:if="${resultado != null and !resultado.isEmpty()}">
+                <h3>RESULTADOS:</h3>
+                <table class="entidad-tabla">
+                    <thead class="entidad-thead">
+                        <tr>
+                            <th>ID</th>
+                            <th>ID BANDA</th>
+                            <th>ID SALA</th>
+                            <th>FECHA</th>
+                            <th>HORA/INICIO</th>
+                            <th>HORA/FIN</th>
+                            <th>PRECIO FINAL</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody class="entidad-tbody">
+                        <tr th:each="reserva : ${resultado}">
+                            <td th:text="${reserva.id}"></td>
+                            <td th:text="${reserva.idBanda}"></td>
+                            <td th:text="${reserva.idSala}"></td>
+                            <td th:text="${reserva.fecha}"></td>
+                            <td th:text="${reserva.horaInicio}"></td>
+                            <td th:text="${reserva.horaFin}"></td>
+                            <td th:text="${reserva.precioFinal}"></td>
+                            <td class="entidad-acciones">
+                                <button class="btn btn-editar"
+                                    th:attr="data-id=${reserva.id}, data-idBanda=${reserva.idBanda}, data-idSala=${reserva.idSala}, data-fecha=${reserva.fecha}, data-horaInicio=${reserva.horaInicio}, data-horaFin=${reserva.horaFin}, data-precioFinal=${reserva.precioFinal}">
+                                    EDITAR
+                                </button>
+                                <a th:href="@{/reserva/eliminar(id=${reserva.id})}" class="btn btn-eliminar"
+                                    onclick="return confirm('¿Estás seguro que querés eliminar esta reserva?')">Eliminar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="principal-container">
+            <h2>TODAS LAS RESERVAS:</h2>
+            <table class="entidad-tabla">
+                <thead class="entidad-thead">
+                    <tr>
+                        <th>ID</th>
+                        <th>BANDA</th>
+                        <th>SALA</th>
+                        <th>FECHA</th>
+                        <th>HORA INICIO</th>
+                        <th>HORA FIN</th>
+                        <th>PRECIO FINAL</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="entidad-tbody">
+                    <tr th:each="reserva : ${reservas}">
+                        <td th:text="${reserva.id}"></td>
+                        <td th:text="${reserva.idBanda}"></td>
+                        <td th:text="${reserva.idSala}"></td>
+                        <td th:text="${reserva.fecha}"></td>
+                        <td th:text="${reserva.horaInicio}"></td>
+                        <td th:text="${reserva.horaFin}"></td>
+                        <td th:text="${reserva.precioFinal}"></td>
+                        <td class="entidad-acciones">
+                            <button class="btn btn-editar"
+                                th:attr="data-id=${reserva.id}, data-idBanda=${reserva.idBanda}, data-idSala=${reserva.idSala}, data-fecha=${reserva.fecha}, data-horaInicio=${reserva.horaInicio}, data-horaFin=${reserva.horaFin}, data-precioFinal=${reserva.precioFinal}">
+                                EDITAR
+                            </button>
+                            <a th:href="@{/reserva/eliminar(id=${reserva.id})}" class="btn btn-eliminar"
+                                onclick="return confirm('¿Estás seguro que querés eliminar esta reserva?')">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal" id="modalEditarReserva">
+        <div class="modal-content">
+            <form id="formEditarReserva" th:action="@{/reserva/guardar}" method="post">
+                <h3>EDITAR RESERVA</h3>
+                <input type="hidden" name="origen" value="reservas" />
+                <input type="hidden" id="reservaIdEditar" name="id" />
+                <div class="form-group">
+                    <label>BANDA:</label>
+                    <select id="reservaIdBandaEditar" name="idBanda" required>
+                        <option value="" disabled selected>Seleccione una banda</option>
+                        <option th:each="banda : ${bandas}" th:value="${banda.id}" th:text="${banda.nombre}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>SALA:</label>
+                    <select id="reservaIdSalaEditar" name="idSala" required>
+                        <option value="" disabled selected>Seleccione una sala</option>
+                        <option th:each="sala : ${salas}" th:value="${sala.id}" th:text="${sala.nombre}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>FECHA:</label>
+                    <input type="date" id="reservaFechaEditar" name="fecha" required />
+                </div>
+                <div class="form-group">
+                    <label>HORA INICIO:</label>
+                    <input type="time" id="reservaHoraInicioEditar" name="horaInicio" required />
+                </div>
+                <div class="form-group">
+                    <label>HORA FIN:</label>
+                    <input type="time" id="reservaHoraFinEditar" name="horaFin" required />
+                </div>
+                <div class="form-group">
+                    <label>PRECIO FINAL:</label>
+                    <input type="number" id="reservaPrecioFinalEditar" name="precioFinal" step="0.01" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal para Crear Reserva -->
+    <div class="modal" id="modalCrearReserva">
+        <div class="modal-content">
+            <form id="formCrearReserva" th:action="@{/reserva/guardar}" method="post">
+                <h3>CREAR RESERVA</h3>
+                <input type="hidden" name="origen" value="index" />
+                <div class="form-group">
+                    <label>BANDA:</label>
+                    <select id="reservaIdBanda" name="idBanda" required>
+                        <option value="" disabled selected>Seleccione una banda</option>
+                        <option th:each="banda : ${bandas}" th:value="${banda.id}" th:text="${banda.nombre}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>SALA:</label>
+                    <select id="reservaIdSala" name="idSala" required>
+                        <option value="" disabled selected>Seleccione una sala</option>
+                        <option th:each="sala : ${salas}" th:value="${sala.id}" th:text="${sala.nombre}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>FECHA:</label>
+                    <input type="date" id="reservaFecha" name="fecha" required />
+                </div>
+                <div class="form-group">
+                    <label>HORA INICIO:</label>
+                    <input type="time" id="reservaHoraInicio" name="horaInicio" required />
+                </div>
+                <div class="form-group">
+                    <label>HORA FIN:</label>
+                    <input type="time" id="reservaHoraFin" name="horaFin" required />
+                </div>
+                <div class="form-group">
+                    <label>PRECIO FINAL:</label>
+                    <input type="number" id="reservaPrecioFinal" name="precioFinal" step="0.01" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Modal de Creación de Reserva
+            const openCrearReservaButton = document.querySelector('.btn-crear-reserva');
+            const modalCrearReserva = document.querySelector('#modalCrearReserva');
+            const closeModalCrearReserva = modalCrearReserva.querySelector('.btn-close');
+            const formCrearReserva = document.getElementById('formCrearReserva');
+
+            console.log('Botón Crear Reserva:', openCrearReservaButton);
+            openCrearReservaButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                formCrearReserva.reset();
+                modalCrearReserva.classList.add('modal--show');
+                console.log('Modal Crear Reserva abierto');
+            });
+
+            closeModalCrearReserva.addEventListener('click', () => {
+                modalCrearReserva.classList.remove('modal--show');
+                formCrearReserva.reset();
+                console.log('Modal Crear Reserva cerrado');
+            });
+
+            modalCrearReserva.addEventListener('click', (e) => {
+                if (e.target === modalCrearReserva) {
+                    modalCrearReserva.classList.remove('modal--show');
+                    formCrearReserva.reset();
+                    console.log('Modal Crear Reserva cerrado por clic fuera');
+                }
+            });
+             // Modal de Edición de Reserva
+            const openEditButtons = document.querySelectorAll('.btn-editar');
+            const modalEditarReserva = document.querySelector('#modalEditarReserva');
+            const closeModalEditarReserva = modalEditarReserva.querySelector('.btn-close');
+            const formEditarReserva = document.getElementById('formEditarReserva');
+
+            openEditButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const id = button.getAttribute('data-id');
+                    const idBanda = button.getAttribute('data-idBanda');
+                    const idSala = button.getAttribute('data-idSala');
+                    const fecha = button.getAttribute('data-fecha');
+                    const horaInicio = button.getAttribute('data-horaInicio');
+                    const horaFin = button.getAttribute('data-horaFin');
+                    const precioFinal = button.getAttribute('data-precioFinal');
+
+                    document.getElementById('reservaIdEditar').value = id || '';
+                    document.getElementById('reservaIdBandaEditar').value = idBanda || '';
+                    document.getElementById('reservaIdSalaEditar').value = idSala || '';
+                    document.getElementById('reservaFechaEditar').value = fecha || '';
+                    document.getElementById('reservaHoraInicioEditar').value = horaInicio || '';
+                    document.getElementById('reservaHoraFinEditar').value = horaFin || '';
+                    document.getElementById('reservaPrecioFinalEditar').value = precioFinal || '';
+
+                    modalEditarReserva.classList.add('modal--show');
+                    console.log('Modal Editar Reserva abierto, id:', id);
+                });
+            });
+
+            closeModalEditarReserva.addEventListener('click', () => {
+                modalEditarReserva.classList.remove('modal--show');
+                formEditarReserva.reset();
+                console.log('Modal Editar Reserva cerrado');
+            });
+    </script>
+</body>
+</html>

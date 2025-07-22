@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio</title>
+    <link rel="stylesheet" href="/stylesEntities.css">
+</head>
+<body>
+    <div class="entidad-container">
+        <div class="entidad-header">
+            <h2 class="entidad-titulo">SERVICIOS DE RESERVAS</h2>
+            <a class="btn-crear" th:href="@{/reserva-servicio/alta}">Agregar servicio a reserva</a>
+            <a class="btn-crear" th:href="@{/}">VOLVER AL INICIO</a>
+        </div>
+        <div class="busqueda-container">
+            <h2>BUSCAR SALA</h2>
+            <form th:action="@{/rs/buscar}" method="get">
+                <div class="form-group">
+                    <label>ID RESERVA:</label>
+                    <input type="number" name="idReserva" placeholder="Ingresá ID de reserva" />
+                </div>
+                <div class="form-group">
+                    <label>ID SERVICIO:</label>
+                    <input type="number" name="idServicio" placeholder="Ingresá ID de servicio" />
+                </div>
+                <button class="btn-buscar" type="submit">BUSCAR</button>
+            </form>
+            <div th:if="${resultado != null and !resultado.isEmpty()}" >
+                <h3>RESULTADOS: </h3>
+                <table class="entidad-tabla">
+                    <thead class="entidad-thead">
+                        <tr>
+                            <th>ID/RESERVA</th>
+                            <th>ID/SERVICIO</th>
+                            <th>CANTIDAD</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody class="entidad-tbody">
+                        <tr th:each="rs : ${resultado}">
+                            <td th:text="${rs.idReserva}"></td>
+                            <td th:text="${rs.idServicio}"></td>
+                            <td th:text="${rs.cantidad}"></td>
+                            <td class="entidad-acciones">
+                            <button class="btn btn-editar"
+                                th:attr="data-idReserva=${rs.idReserva}, data-idServicio=${rs.idServicio}, data-cantidad=${rs.cantidad}">
+                                EDITAR
+                            </button>
+                            <a th:href="@{/reserva-servicio/eliminar(idReserva=${rs.idReserva}, idServicio=${rs.idServicio})}" class="btn btn-eliminar"
+                                onclick="return confirm('¿Estás seguro que querés eliminar esta reserda de servicio?')">ELIMINAR</a>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${error}" style="color: red; margin-top: 10px;">
+                    <p th:text="${error}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="principal-container">
+            <table class="entidad-tabla">
+                <thead class="entidad-thead">
+                    <tr>
+                        <th>RESERVA</th>
+                        <th>SERVICIO</th>
+                        <th>CANTIDAD</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="entidad-tbody">
+                    <tr th:each="reservaServicio : ${reservaServicios}">
+                        <td th:text="${reservaServicio.idReserva}"></td>
+                        <td th:text="${reservaServicio.idServicio}"></td>
+                        <td th:text="${reservaServicio.cantidad}"></td>
+                        <td>
+                            <button class="btn btn-editar"
+                                th:attr="data-idReserva=${reservaServicio.idReserva}, data-idServicio=${reservaServicio.idServicio}, data-cantidad=${reservaServicio.cantidad}">
+                                EDITAR
+                            </button>
+                            <a th:href="@{/reserva-servicio/eliminar(idReserva=${reservaServicio.idReserva}, idServicio=${reservaServicio.idServicio})}" 
+                                onclick="return confirm('¿Estás seguro de eliminar esta relación?')" class="btn btn-eliminar">ELIMINAR</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal" id="modalEditarRS">
+        <div class="modal-content">
+            <form id="formEditarSala" th:action="@{/reserva-servicio/guardar}" method="post">
+                <h3>EDITAR DETALLE DEL SERVICIO</h3>
+                <div class="form-group">
+                    <label>ID/RESERVA:</label>
+                    <input type="text" id="editarIdReserva" name="idReserva" readonly />
+                </div>
+                <div class="form-group">
+                    <label>ID/RESERVA:</label>
+                    <input type="text" id="editarIdServicio" name="idServicio" readonly />
+                </div>
+                <div class="form-group">
+                    <label>CANTIDAD:</label>
+                    <input type:hidden id="editarCantidad" name="cantidad">
+                </div>
+                <div class="form-actions" style="margin-top: 10px; text-align: right;">
+                    <button type="submit">GUARDAR</button>
+                    <button type="button" class="btn-close">CANCELAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal para Crear Sala -->
+    <div class="modal" id="modalCrearRS">
+        <div class="modal-content">
+            <form id="formCrearRS" th:action="@{/reserva-servicio/guardar}" method="post">
+                <h3>CREAR DETALLE DEL SERVICIO</h3>
+                <input type=hidden name="origen" value="index" />
+
+                <div class="form-group">
+                    <label>ID/RESERVA:</label>
+                    <select id="idReserva" name="idReserva">
+                        <option th:each="reserva : ${reservas}" th:value="${reserva.id}" th:text="|Reserva #${reserva.id} - ID Banda: ${reserva.idBanda}, ID Sala: ${reserva.idSala}|">
+                        </option>
+                    </select>   
+                </div>
+                <div class="form-group">
+                    <label>ID/SERVICIO:</label>
+                    <select id="idServicio" name="idServicio">
+                        <option th:each="servicio : ${servicios}" th:value="${servicio.id}" th:text="${servicio.nombre} + ' (Precio: $' + ${servicio.precio} + ')'"></option>
+                    </select>   
+                </div>
+                <div class="form-group">
+                    <label>CANTIDAD:</label>
+                    <input type:hidden id="cantidad" name="cantidad">
+                </div>
+                <div class="form-actions">
+                    <button type="submit">GUARDAR</button>
+                    <button type="button" class="btn-close">CANCELAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+        const openCrearRSButton = document.querySelector('.btn-crear');
+        const modalCrearRS = document.querySelector('#modalCrearRS');
+        const closeModalCrearRS = modalCrearRS.querySelector('.btn-close');
+        const formCrearRS = document.getElementById('formCrearRS');
+
+        if (openCrearRSButton) {
+            openCrearRSButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                formCrearRS.reset(); 
+                modalCrearRS.classList.add('modal--show');
+            });
+        }
+
+        closeModalCrearRS.addEventListener('click', () => {
+            modalCrearRS.classList.remove('modal--show');
+            formCrearRS.reset();
+        });
+
+        modalCrearRS.addEventListener('click', (e) => {
+            if (e.target === modalCrearRS) {
+                modalCrearRS.classList.remove('modal--show');
+                formCrearRS.reset();
+            }
+        });
+
+        const openEditarRSButtons = document.querySelectorAll('.btn-editar');
+        const modalEditarRS = document.querySelector('#modalEditarRS');
+        const closeModalEditarRS = modalEditarRS.querySelector('.btn-close');
+        const formEditarRS = document.getElementById('formEditarRS');
+        const inputEditarIdReserva = document.getElementById('editarIdReserva');
+        const inputEditarIdServicio = document.getElementById('editarIdServicio');
+        const inputEditarCantidad = document.getElementById('editarCantidad');
+
+        openEditarRSButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const idReserva = button.getAttribute('data-idReserva');
+                const idServicio = button.getAttribute('data-idServicio');
+                const cantidad = button.getAttribute('data-cantidad');
+
+                inputEditarIdReserva.value = idReserva || '';
+                inputEditarIdServicio.value = idServicio || '';
+                inputEditarCantidad.value = cantidad || '';
+
+                modalEditarRS.classList.add('modal--show');
+            });
+        });
+
+        closeModalEditarRS.addEventListener('click', () => {
+            modalEditarRS.classList.remove('modal--show');
+            formEditarRS.reset();
+        });
+
+        modalEditarRS.addEventListener('click', (e) => {
+            if (e.target === modalEditarRS) {
+                modalEditarRS.classList.remove('modal--show');
+                formEditarRS.reset();
+            }
+        });
+    });
+    </script>
+</body>
+</html>

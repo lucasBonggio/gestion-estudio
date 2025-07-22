@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Estudio Musical</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav>
+        <h1>Gestión de estudio</h1>
+    </nav>
+    <div class="dashboard">
+        <div class="card">
+            <img src="/sala.png" alt="">
+            <h3>SALAS</h3>
+            <button class="btn-crear-sala btn-crear">CREAR SALA</button>
+            <a href="/salas">VER SALAS</a>
+        </div>
+        <div class="card">
+            <img src="/servicio.jpg" alt="">
+            <h3>SERVICIOS</h3>
+            <button class="btn-crear-servicio btn-crear">CREAR SERVICIO</button>
+            <a href="/servicios">VER SERVICIOS</a>
+        </div>
+        <div class="card">
+            <img src="/reserva.png" alt="">
+            <h3>RESERVAS</h3>
+            <button class="btn-crear-reserva btn-crear">CREAR RESERVA</button>
+            <a href="/reservas">VER RESERVAS</a>
+        </div>
+        <div class="card">
+            <img src="/rs.jpg" alt="">
+            <h3>RESERVA SERVICIOS</h3>
+            <button class="btn-crear-rs btn-crear">AGREGAR A RESERVA</button>
+            <a href="/reserva-servicios">VER TODO</a>
+        </div>
+        <div class="card">
+            <img src="/banda.png" alt="">
+            <h3>BANDAS</h3>
+            <button class="btn-crear-banda btn-crear">CREAR BANDA</button>
+            <a href="/bandas">VER BANDAS</a>
+        </div>
+    </div>
+    <!-- Modal para Crear Sala -->
+    <div class="modal" id="modalCrearSala">
+        <div class="modal-content">
+            <form id="formCrearSala" th:action="@{/sala/guardar}" method="post">
+                <h3>CREAR SALA</h3>
+                <input type="hidden" name="origen" value="index" />
+                <div class="form-group">
+                    <label>NOMBRE:</label>
+                    <input type="text" id="salaNombreCrear" name="nombre" required />
+                </div>
+                <div class="form-group">
+                    <label>TIPO:</label>
+                    <select id="salaTipoCrear" name="tipo">
+                        <option th:each="tipo : ${tipos}" th:value="${tipo}" th:text="${tipo}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>PRECIO POR HORA:</label>
+                    <input type="number" id="salaPrecioCrear" name="precioHora" required />
+                </div>
+                <div class="form-group">
+                    <label>CAPACIDAD:</label>
+                    <input type="number" id="salaCapacidadCrear" name="capacidad" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal para Crear Servicio -->
+    <div class="modal" id="modalCrearServicio">
+        <div class="modal-content">
+            <form id="formCrearServicio" th:action="@{/servicio/guardar}" method="post">
+                <h3>CREAR SERVICIO</h3>
+                <input type="hidden" name="origen" value="index" />
+                <div class="form-group">
+                    <label>NOMBRE:</label>
+                    <input type="text" id="servicioNombreCrear" name="nombre" required />
+                </div>
+                <div class="form-group">
+                    <label>PRECIO:</label>
+                    <input type="number" id="servicioPrecioCrear" name="precio" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal para Crear Reserva -->
+    <div class="modal" id="modalCrearReserva">
+        <div class="modal-content">
+            <form id="formCrearReserva" th:action="@{/reserva/guardar}" method="post">
+                <h3>CREAR RESERVA</h3>
+                <input type="hidden" name="origen" value="index" />
+                <div class="form-group">
+                    <label>BANDA:</label>
+                    <select id="reservaIdBanda" name="idBanda" required>
+                        <option value="" disabled selected>Seleccione una banda</option>
+                        <option th:each="banda : ${bandas}" th:value="${banda.id}" th:text="${banda.nombre}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>SALA:</label>
+                    <select id="reservaIdSala" name="idSala" required>
+                        <option value="" disabled selected>Seleccione una sala</option>
+                        <option th:each="sala : ${salas}" th:value="${sala.id}" th:text="${sala.nombre}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>FECHA:</label>
+                    <input type="date" id="reservaFecha" name="fecha" required />
+                </div>
+                <div class="form-group">
+                    <label>HORA INICIO:</label>
+                    <input type="time" id="reservaHoraInicio" name="horaInicio" required />
+                </div>
+                <div class="form-group">
+                    <label>HORA FIN:</label>
+                    <input type="time" id="reservaHoraFin" name="horaFin" required />
+                </div>
+                <div class="form-group">
+                    <label>PRECIO FINAL:</label>
+                    <input type="number" id="reservaPrecioFinal" name="precioFinal" step="0.01" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal para Crear Banda -->
+    <div class="modal" id="modalCrearBanda">
+        <div class="modal-content">
+            <form id="formCrearBanda" th:action="@{/banda/guardar}" method="post">
+                <h3>CREAR BANDA</h3>
+                <input type="hidden" name="origen" value="bandas" />
+                <input type="hidden" id="BandaId" name="id" th:if="${banda != null and banda.id != 0}" th:value="${banda.id}" />
+                <div class="form-group">
+                    <label>NOMBRE:</label>
+                    <input type="text" id="bandaNombre" name="nombre" required />
+                </div>
+                <div class="form-group">
+                    <label>GENERO:</label>
+                    <input type="text" id="bandaGenero" name="genero" required />
+                </div>
+                <div class="form-group">
+                    <label>CANT/MUSICOS:</label>
+                    <input type="number" id="bandaMusicos" name="cantidadMusicos" required />
+                </div>
+                <div class="form-group">
+                    <label>CONTACTO:</label>
+                    <input type="text" id="bandaContacto" name="contacto" required />
+                </div>
+                <div class="form-group">
+                    <label>OBSERVACIONES:</label>
+                    <input type="text" id="bandaObservaciones" name="observaciones"/>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal para CREAR Reserva-Servicio -->
+    <div class="modal" id="modalCrearRS">
+        <div class="modal-content">
+            <form th:action="@{/reserva-servicio/guardar}" method="post">
+                <h3>CREAR DETALLE DEL SERVICIO</h3>
+
+                <div class="form-group">
+                    <label>RESERVA:</label>
+                    <select name="idReserva" required>
+                        <option value="" disabled selected>Seleccionar reserva</option>
+                        <option th:each="r : ${reservas}"
+                                th:value="${r.id}"
+                                th:text="|Reserva #${r.id} - Banda ID: ${r.idBanda}, Sala ID: ${r.idSala}|">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>SERVICIO:</label>
+                    <select name="idServicio" required>
+                        <option value="" disabled selected>Seleccionar servicio</option>
+                        <option th:each="s : ${servicios}"
+                                th:value="${s.id}"
+                                th:text="${s.nombre} + ' (Precio: $' + ${s.precio} + ')'">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>CANTIDAD:</label>
+                    <input type="number" name="cantidad" value="1" min="1" required />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Script para manejar los modales -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modal de Creación de Sala
+            const openCrearSalaButton = document.querySelector('.btn-crear-sala');
+            const modalCrearSala = document.querySelector('#modalCrearSala');
+            const closeModalCrearSala = modalCrearSala.querySelector('.btn-close');
+            const formCrearSala = document.getElementById('formCrearSala');
+
+            openCrearSalaButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                formCrearSala.reset();
+                modalCrearSala.classList.add('modal--show');
+            });
+
+            closeModalCrearSala.addEventListener('click', () => {
+                modalCrearSala.classList.remove('modal--show');
+                formCrearSala.reset();
+            });
+
+            modalCrearSala.addEventListener('click', (e) => {
+                if (e.target === modalCrearSala) {
+                    modalCrearSala.classList.remove('modal--show');
+                    formCrearSala.reset();
+                }
+            });
+
+            // Modal de Creación de Servicio
+            const openCrearServicioButton = document.querySelector('.btn-crear-servicio');
+            const modalCrearServicio = document.querySelector('#modalCrearServicio');
+            const closeModalCrearServicio = modalCrearServicio.querySelector('.btn-close');
+            const formCrearServicio = document.getElementById('formCrearServicio');
+
+            openCrearServicioButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                formCrearServicio.reset();
+                modalCrearServicio.classList.add('modal--show');
+            });
+
+            closeModalCrearServicio.addEventListener('click', () => {
+                modalCrearServicio.classList.remove('modal--show');
+                formCrearServicio.reset();
+            });
+
+            modalCrearServicio.addEventListener('click', (e) => {
+                if (e.target === modalCrearServicio) {
+                    modalCrearServicio.classList.remove('modal--show');
+                    formCrearServicio.reset();
+                }
+            });
+
+            // Modal de Creación de Reserva
+            const openCrearReservaButton = document.querySelector('.btn-crear-reserva');
+            const modalCrearReserva = document.querySelector('#modalCrearReserva');
+            const closeModalCrearReserva = modalCrearReserva.querySelector('.btn-close');
+            const formCrearReserva = document.getElementById('formCrearReserva');
+
+            console.log('Botón Crear Reserva:', openCrearReservaButton);
+            openCrearReservaButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                formCrearReserva.reset();
+                modalCrearReserva.classList.add('modal--show');
+                console.log('Modal Crear Reserva abierto');
+            });
+
+            closeModalCrearReserva.addEventListener('click', () => {
+                modalCrearReserva.classList.remove('modal--show');
+                formCrearReserva.reset();
+                console.log('Modal Crear Reserva cerrado');
+            });
+
+            modalCrearReserva.addEventListener('click', (e) => {
+                if (e.target === modalCrearReserva) {
+                    modalCrearReserva.classList.remove('modal--show');
+                    formCrearReserva.reset();
+                    console.log('Modal Crear Reserva cerrado por clic fuera');
+                }
+            });
+                        // Modal de Creación
+            const openCrearModalButton = document.querySelector('.btn-crear-banda');
+            const modalCrear = document.querySelector('#modalCrearBanda');
+            const closeModalCrear = modalCrear.querySelector('.btn-close');
+            const formCrear = document.getElementById('formCrearBanda');
+
+            openCrearModalButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                formCrear.reset();
+                modalCrear.classList.add('modal--show');
+            });
+
+            closeModalCrear.addEventListener('click', () => {
+                modalCrear.classList.remove('modal--show');
+                formCrear.reset();
+            });
+
+            modalCrear.addEventListener('click', (e) => {
+                if (e.target === modalCrear) {
+                    modalCrear.classList.remove('modal--show');
+                    formCrear.reset();
+                }
+            });
+            // Modal de Creación de Reserva-Servicio (RS)
+            const openCrearRSButton = document.querySelector('.btn-crear-rs');
+            const modalCrearRS = document.getElementById('modalCrearRS');
+            const closeModalCrearRS = modalCrearRS?.querySelector('.btn-close');
+            const formCrearRS = document.getElementById('formCrearRS');
+
+            if (openCrearRSButton && modalCrearRS) {
+                openCrearRSButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    formCrearRS?.reset();
+                    modalCrearRS.classList.add('modal--show');
+                });
+            }
+
+            closeModalCrearRS?.addEventListener('click', () => {
+                modalCrearRS.classList.remove('modal--show');
+                formCrearRS?.reset();
+            });
+
+            modalCrearRS?.addEventListener('click', (e) => {
+                if (e.target === modalCrearRS) {
+                    modalCrearRS.classList.remove('modal--show');
+                    formCrearRS?.reset();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

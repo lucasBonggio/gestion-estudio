@@ -8,11 +8,11 @@
 		<version>3.5.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.tercer.trabajo</groupId>
-	<artifactId>tercerTrabajo</artifactId>
+	<groupId>com.gestion.estudio</groupId>
+	<artifactId>gestion-estudio</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>trabajoFinal</name>
-	<description>Trabajo final de POO</description>
+	<name>gestion-estudio</name>
+	<description>Pequeño proyecto que gestiona salas, reservas, servicios y bandas de un estudio musical.</description>
 	<url/>
 	<licenses>
 		<license/>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio</title>
+    <link rel="stylesheet" href="/stylesEntities.css">
+</head>
+<body>
+    <div class="entidad-container">
+        <div class="entidad-header">
+            <h2 class="entidad-titulo">SALAS</h2>
+            <a class="btn-crear" th:href="@{/sala/alta}">CREAR SALA</a>
+            <a class="btn-crear" th:href="@{/}">VOLVER AL INICIO</a>
+        </div>
+        <div class="busqueda-container">
+            <h2>BUSCAR SALA</h2>
+            <form class="formBuscar" th:action="@{/salas/buscar}" method="get">
+                <label class="labelForm">
+                    <input type="text" name="valor" placeholder="Ingresá el valor..." />
+                </label>
+                <label class="labelForm">
+                    <select name="criterio" class="selectFiltro">
+                        <option value="id">ID</option>
+                        <option value="nombre">NOMBRE</option>
+                    </select>
+                </label>
+                <button class="btn-buscar" type="submit">BUSCAR</button>
+            </form>
+            <div th:if="${resultado != null and !resultado.isEmpty()}" >
+                <h3>RESULTADOS: </h3>
+                <table class="entidad-tabla">
+                    <thead class="entidad-thead">
+                        <tr>
+                            <th>ID</th>
+                            <th>NOMBRE</th>
+                            <th>CAPACIDAD</th>
+                            <th>TIPO</th>
+                            <th>PRECIO/HORA</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody class="entidad-tbody">
+                        <tr th:each="sala : ${resultado}">
+                            <td th:text="${sala.id}"></td>
+                            <td th:text="${sala.nombre}"></td>
+                            <td th:text="${sala.capacidad}"></td>
+                            <td th:text="${sala.tipo}"></td>
+                            <td th:text="${sala.precioHora}"></td>
+                            <td class="entidad-acciones">
+                            <button class="btn btn-editar"
+                                th:attr="data-id=${sala.id}, data-nombre=${sala.nombre}, data-tipo=${sala.tipo}, data-precio=${sala.precioHora}, data-capacidad=${sala.capacidad}">
+                                EDITAR
+                            </button>
+                            <a th:href="@{/sala/eliminar(id=${sala.id})}" class="btn btn-eliminar"
+                                onclick="return confirm('¿Estás seguro que querés eliminar esta sala?')">ELIMINAR</a>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${error}" style="color: red; margin-top: 10px;">
+                    <p th:text="${error}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="principal-container">
+            <h2>TODAS LAS SALAS:</h2>
+            <table class="entidad-tabla">
+                <thead class="entidad-thead">
+                    <tr>
+                        <th>ID</th>
+                            <th>NOMBRE</th>
+                            <th>CAPACIDAD</th>
+                            <th>TIPO</th>
+                            <th>PRECIO/HORA</th>
+                            <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="entidad-tbody">
+                        <tr th:each="sala : ${salas}">
+                            <td th:text="${sala.id}"></td>
+                            <td th:text="${sala.nombre}"></td>
+                            <td th:text="${sala.capacidad}"></td>
+                            <td th:text="${sala.tipo}"></td>
+                            <td th:text="${sala.precioHora}"></td>
+                            <td class="entidad-acciones">
+                                <button class="btn btn-editar"
+                                    th:attr="data-id=${sala.id}, data-nombre=${sala.nombre}, data-tipo=${sala.tipo}, data-precio=${sala.precioHora}, data-capacidad=${sala.capacidad}">
+                                    EDITAR
+                                </button>
+                                <a th:href="@{/sala/eliminar(id=${sala.id})}" class="btn btn-eliminar"
+                                    onclick="return confirm('¿Estás seguro que querés eliminar esta sala?')">ELIMINAR</a>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal" id="modalEditarSala">
+        <div class="modal-content">
+            <form id="formEditarSala" th:action="@{/sala/guardar}" method="post">
+                <h3>EDITAR SALA</h3>
+                <div class="form-group">
+                    <label>ID:</label>
+                    <input type="hidden" id="salaId" name="id" />
+                </div>
+                <div class="form-group">
+                    <label>NOMBRE:</label>
+                    <input type="text" id="salaNombre" name="nombre" required />
+                </div>
+                <div class="form-group">
+                    <label>TIPO:</label>
+                    <select id="salaTipo" name="tipo">
+                        <option th:each="tipo : ${tipos}" th:value="${tipo}" th:text="${tipo}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>PRECIO POR HORA:</label>
+                    <input type="number" id="salaPrecio" name="precioHora" required />
+                </div>
+                <div class="form-group">
+                    <label>CAPACIDAD:</label>
+                    <input type="number" id="salaCapacidad" name="capacidad" required />
+                </div>
+                <div class="form-actions" style="margin-top: 10px; text-align: right;">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+        <!-- Modal para Crear Sala -->
+    <div class="modal" id="modalCrearSala">
+        <div class="modal-content">
+            <form id="formCrearSala" th:action="@{/sala/guardar}" method="post">
+                <h3>CREAR SALA</h3>
+                <input type="hidden" name="origen" value="index" />
+                <div class="form-group">
+                    <label>NOMBRE:</label>
+                    <input type="text" id="salaNombreCrear" name="nombre" required />
+                </div>
+                <div class="form-group">
+                    <label>TIPO:</label>
+                    <select id="salaTipoCrear" name="tipo">
+                        <option th:each="tipo : ${tipos}" th:value="${tipo}" th:text="${tipo}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>PRECIO POR HORA:</label>
+                    <input type="number" id="salaPrecioCrear" name="precioHora" required />
+                </div>
+                <div class="form-group">
+                    <label>CAPACIDAD:</label>
+                    <input type="number" id="salaCapacidadCrear" name="capacidad" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modal de Edición
+            const openModalButtons = document.querySelectorAll('.btn-editar');
+            const modalEditar = document.querySelector('#modalEditarSala');
+            const closeModalEditar = modalEditar.querySelector('.btn-close');
+            const formEditar = document.getElementById('formEditarSala');
+            const inputIdEditar = document.getElementById('salaId');
+            const inputNombreEditar = document.getElementById('salaNombre');
+            const inputTipoEditar = document.getElementById('salaTipo');
+            const inputPrecioEditar = document.getElementById('salaPrecio');
+            const inputCapacidadEditar = document.getElementById('salaCapacidad');
+
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const id = button.getAttribute('data-id');
+                    const nombre = button.getAttribute('data-nombre');
+                    const tipo = button.getAttribute('data-tipo');
+                    const precio = button.getAttribute('data-precio');
+                    const capacidad = button.getAttribute('data-capacidad');
+
+                    inputIdEditar.value = id || '';
+                    inputNombreEditar.value = nombre || '';
+                    inputTipoEditar.value = tipo || '';
+                    inputPrecioEditar.value = precio || '';
+                    inputCapacidadEditar.value = capacidad || '';
+
+                    modalEditar.classList.add('modal--show');
+                });
+            });
+
+            closeModalEditar.addEventListener('click', () => {
+                modalEditar.classList.remove('modal--show');
+                formEditar.reset();
+            });
+
+            modalEditar.addEventListener('click', (e) => {
+                if (e.target === modalEditar) {
+                    modalEditar.classList.remove('modal--show');
+                    formEditar.reset();
+                }
+            });
+
+            // Modal de Creación
+            const openCrearModalButton = document.querySelector('.btn-crear');
+            const modalCrear = document.querySelector('#modalCrearSala');
+            const closeModalCrear = modalCrear.querySelector('.btn-close');
+            const formCrear = document.getElementById('formCrearSala');
+
+            openCrearModalButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                formCrear.reset(); // Asegurar que el formulario esté vacío
+                modalCrear.classList.add('modal--show');
+            });
+
+            closeModalCrear.addEventListener('click', () => {
+                modalCrear.classList.remove('modal--show');
+                formCrear.reset();
+            });
+
+            modalCrear.addEventListener('click', (e) => {
+                if (e.target === modalCrear) {
+                    modalCrear.classList.remove('modal--show');
+                    formCrear.reset();
+                }
+            });
+        });
+        </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const openModalButtons = document.querySelectorAll('.btn-editar');
+        const modal = document.querySelector('.modal');
+        const closeModal = document.querySelector('.btn-close');
+        const form = document.getElementById('formEditarSala');
+        const inputId = document.getElementById('salaId');
+        const inputNombre = document.getElementById('salaNombre');
+        const inputTipo = document.getElementById('salaTipo');
+        const inputPrecio = document.getElementById('salaPrecio');
+        const inputCapacidad = document.getElementById('salaCapacidad');
+
+        openModalButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                const id = button.getAttribute('data-id');
+                const nombre = button.getAttribute('data-nombre');
+                const tipo = button.getAttribute('data-tipo');
+                const precio = button.getAttribute('data-precio');
+                const capacidad = button.getAttribute('data-capacidad');
+
+                inputId.value = id || '';
+                inputNombre.value = nombre || '';
+                inputTipo.value = tipo || '';
+                inputPrecio.value = precio || '';
+                inputCapacidad.value = capacidad || '';
+
+                modal.classList.add('modal--show');
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('modal--show');
+            form.reset();
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('modal--show');
+                form.reset();
+            }
+        });
+    });
+    </script>
+</body>
+</html>

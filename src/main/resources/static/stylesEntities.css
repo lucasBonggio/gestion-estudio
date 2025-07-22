@@ -1,0 +1,284 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #2c3e50;
+    margin: 0;
+    padding: 20px;
+}
+
+.entidad-container {
+    background-color: #9BB5CF;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.entidad-header {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.entidad-header a {
+    display: flex;
+    height: 35px;
+    width: 65px;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.entidad-titulo {
+    color: #333;
+    margin: 0;
+}
+
+.busqueda-container {
+    background-color: white;
+    margin: 50px 0;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.principal-container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.busqueda-container h2,
+.busqueda-container h3 {
+    text-align: center;
+    margin: 0;
+}
+
+.formBuscar {
+    position: relative;
+    z-index: 1000;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.entidad-tabla {
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.btn-crear {
+    padding: 8px 16px;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+}
+
+.btn-crear:hover {
+    background-color: #2980b9;
+}
+
+.entidad-thead th {
+    background-color: #2c3e50;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.entidad-tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.entidad-acciones {
+    text-align: center;
+}
+
+.labelForm {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    min-width: 120px;
+}
+
+.labelForm select,
+.labelForm input {
+    padding: 8px 10px;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 180px;
+    transition: border-color 0.3s ease;
+}
+
+.labelForm input:focus,
+.labelForm select:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+.btn-buscar {
+    padding: 8px 16px;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-buscar:hover {
+    background-color: #2980b9;
+}
+
+.btn {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+}
+
+.btn-editar {
+    background-color: #f0ad4e;
+}
+
+.btn-editar:hover {
+    background-color: #e69b3a;
+}
+
+.btn-eliminar {
+    background-color: #d9534f;
+}
+
+.btn-eliminar:hover {
+    background-color: #c9302c;
+}
+
+/* Estilos del modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.modal--show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modal-content h3 {
+    color: #333;
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 90%;
+    padding: 8px 10px;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-actions button[type="submit"] {
+    background-color: #2c3e50;
+    color: white;
+}
+
+.form-actions button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+.btn-close {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-close:hover {
+    background-color: #c9302c;
+}
+
+.entidad-acciones {
+    display: flex;
+}

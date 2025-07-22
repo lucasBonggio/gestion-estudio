@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio - Servicios</title>
+    <link rel="stylesheet" href="/stylesEntities.css">
+</head>
+<body>
+    <div class="entidad-container">
+        <div class="entidad-header">
+            <h2 class="entidad-titulo">Servicios</h2>
+            <button class="btn-crear">Crear servicio</button>
+            <a class="btn-crear" th:href="@{/}">VOLVER AL INICIO</a>
+        </div>
+        <!-- Sección de búsqueda -->
+        <div class="busqueda-container">
+            <h2>BUSCAR SERVICIO</h2>
+            <form class="formBuscar" th:action="@{/servicios/buscar}" method="get">
+                <label class="labelForm">
+                    <input type="text" name="valor" placeholder="Ingresá el valor..." />
+                </label>
+                <label class="labelForm">
+                    <select name="criterio" class="selectFiltro">
+                        <option value="id">ID</option>
+                        <option value="nombre">NOMBRE</option>
+                    </select>
+                </label>
+                <button class="btn-buscar" type="submit">BUSCAR</button>
+            </form>
+            <div th:if="${resultado != null and !resultado.isEmpty()}">
+                <h3>RESULTADOS:</h3>
+                <table class="entidad-tabla">
+                    <thead class="entidad-thead">
+                        <tr>
+                            <th>ID</th>
+                            <th>NOMBRE</th>
+                            <th>PRECIO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody class="entidad-tbody">
+                        <tr th:each="servicio : ${resultado}">
+                            <td th:text="${servicio.id}"></td>
+                            <td th:text="${servicio.nombre}"></td>
+                            <td th:text="${servicio.precio}"></td>
+                            <td class="entidad-acciones">
+                                <button class="btn btn-editar"
+                                    th:attr="data-id=${servicio.id}, data-nombre=${servicio.nombre}, data-precio=${servicio.precio}">
+                                    EDITAR
+                                </button>
+                                <a th:href="@{/servicio/eliminar(id=${servicio.id})}" class="btn btn-eliminar"
+                                    onclick="return confirm('¿Estás seguro que querés eliminar este servicio?')">Eliminar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Lista de servicios -->
+        <div class="principal-container">
+            <h2>TODOS LOS SERVICIOS:</h2>
+            <table class="entidad-tabla">
+                <thead class="entidad-thead">
+                    <tr>
+                        <th>ID</th>
+                        <th>NOMBRE</th>
+                        <th>PRECIO</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="entidad-tbody">
+                    <tr th:each="servicio : ${servicios}">
+                        <td th:text="${servicio.id}"></td>
+                        <td th:text="${servicio.nombre}"></td>
+                        <td th:text="${servicio.precio}"></td>
+                        <td class="entidad-acciones">
+                            <button class="btn btn-editar"
+                                th:attr="data-id=${servicio.id}, data-nombre=${servicio.nombre}, data-precio=${servicio.precio}">
+                                EDITAR
+                            </button>
+                            <a th:href="@{/servicio/eliminar(id=${servicio.id})}" class="btn btn-eliminar"
+                                onclick="return confirm('¿Estás seguro que querés eliminar este servicio?')">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Modal para Editar Servicio -->
+    <div class="modal" id="modalEditarServicio">
+        <div class="modal-content">
+            <form id="formEditarServicio" th:action="@{/servicio/guardar}" method="post">
+                <h3>EDITAR SERVICIO</h3>
+                <input type="hidden" name="id" id="servicioId" />
+                <input type="hidden" name="origen" value="servicios" />
+                <div class="form-group">
+                    <label>NOMBRE:</label>
+                    <input type="text" id="servicioNombre" name="nombre" required />
+                </div>
+                <div class="form-group">
+                    <label>PRECIO:</label>
+                    <input type="number" id="servicioPrecio" name="precio" required />
+                </div>
+                <div class="form-actions" style="margin-top: 10px; text-align: right;">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal para Crear Servicio -->
+    <div class="modal" id="modalCrearServicio">
+        <div class="modal-content">
+            <form id="formCrearServicio" th:action="@{/servicio/guardar}" method="post">
+                <h3>CREAR SERVICIO</h3>
+                <input type="hidden" name="origen" value="servicios" />
+                <div class="form-group">
+                    <label>NOMBRE:</label>
+                    <input type="text" id="servicioNombreCrear" name="nombre" required />
+                </div>
+                <div class="form-group">
+                    <label>PRECIO:</label>
+                    <input type="number" id="servicioPrecioCrear" name="precio" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="btn-close">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Script para manejar los modales -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modal de Creación
+            const openCrearModalButton = document.querySelector('.btn-crear');
+            const modalCrear = document.querySelector('#modalCrearServicio');
+            const closeModalCrear = modalCrear.querySelector('.btn-close');
+            const formCrear = document.getElementById('formCrearServicio');
+
+            openCrearModalButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                formCrear.reset();
+                modalCrear.classList.add('modal--show');
+            });
+
+            closeModalCrear.addEventListener('click', () => {
+                modalCrear.classList.remove('modal--show');
+                formCrear.reset();
+            });
+
+            modalCrear.addEventListener('click', (e) => {
+                if (e.target === modalCrear) {
+                    modalCrear.classList.remove('modal--show');
+                    formCrear.reset();
+                }
+            });
+
+            // Modal de Edición
+            const openModalButtons = document.querySelectorAll('.btn-editar');
+            const modalEditar = document.querySelector('#modalEditarServicio');
+            const closeModalEditar = modalEditar.querySelector('.btn-close');
+            const formEditar = document.getElementById('formEditarServicio');
+            const inputIdEditar = document.getElementById('servicioId');
+            const inputNombreEditar = document.getElementById('servicioNombre');
+            const inputPrecioEditar = document.getElementById('servicioPrecio');
+
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const id = button.getAttribute('data-id');
+                    const nombre = button.getAttribute('data-nombre');
+                    const precio = button.getAttribute('data-precio');
+
+                    inputIdEditar.value = id || '';
+                    inputNombreEditar.value = nombre || '';
+                    inputPrecioEditar.value = precio || '';
+
+                    modalEditar.classList.add('modal--show');
+                });
+            });
+
+            closeModalEditar.addEventListener('click', () => {
+                modalEditar.classList.remove('modal--show');
+                formEditar.reset();
+            });
+
+            modalEditar.addEventListener('click', (e) => {
+                if (e.target === modalEditar) {
+                    modalEditar.classList.remove('modal--show');
+                    formEditar.reset();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
