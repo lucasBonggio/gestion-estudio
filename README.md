@@ -53,6 +53,7 @@ CREATE DATABASE estudio_musical;
 cp src/main/resources/application-template.properties src/main/resources/application.properties
 ```
 Edita application.properties con tus credenciales:
+```bash
 spring.datasource.url=jdbc:mysql://localhost:3306/estudio_musical
 spring.datasource.username=root
 spring.datasource.password=tu_contraseña_secreta
@@ -60,6 +61,7 @@ spring.datasource.password=tu_contraseña_secreta
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+```
 🔒 El archivo application.properties está en el .gitignore y no se sube al repo.
 
 4. Ejecutar la aplicación
@@ -74,7 +76,7 @@ http://localhost:8080
 ```
 
 📁 Estructura del Proyecto
-
+```bash
 src/
 ├── main/
 │   ├── java/com/tercer/trabajo/
@@ -87,14 +89,14 @@ src/
 │       ├── templates/         # Archivos HTML (Thymeleaf)
 │       ├── static/            # CSS, JS, imágenes
 │       └── application.properties
-
+```
 
 📂 Archivos Importantes
-
+```bash
     application-template.properties: ejemplo de configuración (sin credenciales).
 
     .gitignore: protege archivos sensibles como application.properties.
+```
 
-🙌 Autor
 Lucas Bonggio | Portfolio | ✉️ adriano.abonggio@gmail.com
 
