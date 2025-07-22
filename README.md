@@ -35,16 +35,6 @@ Este sistema permite gestionar **bandas, salas, reservas y servicios** de un est
 
 ---
 
-## 🖼️ Capturas del Sistema
-
-> ⚠️ Asegúrate de subir imágenes reales a la carpeta `screenshots/`.
-
-- Vista principal del sistema  
-- Modal para crear nuevas salas  
-- Listado con opciones de edición/eliminación  
-
----
-
 ## 📦 Cómo Ejecutar el Proyecto
 
 ### 1. Clonar el repositorio
@@ -52,15 +42,17 @@ Este sistema permite gestionar **bandas, salas, reservas y servicios** de un est
 ```bash
 1. git clone https://github.com/tu-usuario/trabajo-final-estudio-musical.git
 cd trabajo-final-estudio-musical
-
+```
 2. Crear la base de datos
+```bash
 CREATE DATABASE estudio_musical;
+```
 
 3. Configurar credenciales de la base de datos
+```bash
 cp src/main/resources/application-template.properties src/main/resources/application.properties
-
+```
 Edita application.properties con tus credenciales:
-
 spring.datasource.url=jdbc:mysql://localhost:3306/estudio_musical
 spring.datasource.username=root
 spring.datasource.password=tu_contraseña_secreta
@@ -71,14 +63,16 @@ spring.jpa.show-sql=true
 🔒 El archivo application.properties está en el .gitignore y no se sube al repo.
 
 4. Ejecutar la aplicación
+```bash
 ./mvnw spring-boot:run
+```
 
-5. Acceder desde el navegador
+6. Acceder desde el navegador
+```bash
 http://localhost:8080
 
 ```
 
-```bash
 📁 Estructura del Proyecto
 
 src/
@@ -93,7 +87,7 @@ src/
 │       ├── templates/         # Archivos HTML (Thymeleaf)
 │       ├── static/            # CSS, JS, imágenes
 │       └── application.properties
-```
+
 
 📂 Archivos Importantes
 
